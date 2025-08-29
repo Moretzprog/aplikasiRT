@@ -1,0 +1,38 @@
+name: app_security
+description: "A new Flutter project."
+
+# Prevent accidental publishing to pub.dev
+publish_to: "none"
+
+# App version
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_spinkit: ^5.2.1
+  flutter_svg: ^2.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/welcomescreen.png
+    - assets/images/women.png
+    - assets/images/people1.png
+    - assets/images/people2.png
+    - assets/images/people3.png
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-VariableFont_opsz,wght.ttf
