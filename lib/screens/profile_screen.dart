@@ -1,12 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app_security/auth_wrapper.dart'; // 🔑 penting agar balik ke AuthWrapper
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          titlePadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+          contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+          actionsPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          title: Row(
+            children: const [
+              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
+              SizedBox(width: 8),
+              Text(
+                "Konfirmasi",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          content: const Text(
+            "Apakah Anda yakin ingin keluar dari aplikasi?",
+            style: TextStyle(fontSize: 15, color: Colors.black87),
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blueGrey,
+                textStyle: const TextStyle(fontSize: 14),
+              ),
+              onPressed: () {
+                Navigator.pop(context); // tutup dialog
+              },
+              child: const Text("Tidak"),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              ),
+              onPressed: () async {
+                Navigator.pop(context); // tutup dialog dulu
+                await FirebaseAuth.instance.signOut(); // 🔴 logout Firebase
+
+                // Bersihkan semua halaman & kembali ke AuthWrapper
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const AuthWrapper()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+              child:
+                  const Text("Ya", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F3F3),
       appBar: AppBar(
+        backgroundColor: const Color(0xFFF5F3F3),
         title: const Text('Profile'),
         centerTitle: true,
         elevation: 0,
@@ -15,30 +87,26 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Foto Profil
             const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/images/profile.png'), 
-              // ganti dengan path gambar kamu
+              backgroundImage: NetworkImage('https://picsum.photos/400/200'),
             ),
             const SizedBox(height: 16),
 
-            // Nama & Email
-            const Text(
-              "Nama Pengguna",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              user?.displayName ?? "Nama Pengguna",
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            const Text(
-              "email@example.com",
-              style: TextStyle(color: Colors.grey),
+            Text(
+              user?.email ?? "email@example.com",
+              style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 20),
 
-            // Tombol Edit Profil
             ElevatedButton.icon(
               onPressed: () {
-                // Arahkan ke halaman edit profil
+                // TODO: ke halaman edit profil
               },
               icon: const Icon(Icons.edit),
               label: const Text("Edit Profile"),
@@ -51,7 +119,6 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Menu Lain
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -74,10 +141,10 @@ class ProfileScreen extends StatelessWidget {
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.logout, color: Colors.red),
-                    title: const Text("Keluar", style: TextStyle(color: Colors.red)),
+                    title: const Text("Keluar",
+                        style: TextStyle(color: Colors.red)),
                     onTap: () {
-                      // Tambahkan logika logout
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder:    (context) => const ProfileScreen()));
+                      _showLogoutDialog(context);
                     },
                   ),
                 ],

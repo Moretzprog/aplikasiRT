@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'screens/onboard_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'auth_wrapper.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const AplikasiKeamanan());
 }
 
@@ -17,7 +23,7 @@ class AplikasiKeamanan extends StatelessWidget {
         fontFamily: 'Inter',
         primarySwatch: Colors.blue,
       ),
-      home: const OnboardingScreen(),
+      home: const AuthWrapper(),
     );
   }
 }

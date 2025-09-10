@@ -27,9 +27,11 @@ class _MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
+      // backgroundColor: const Color(0xFFF5F3F3),
+      backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: const Color.fromARGB(255, 99, 162, 213),
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [

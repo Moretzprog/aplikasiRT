@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "687170810324",
+    "firebase_url": "https://aplikasirt-12cfb-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "aplikasirt-12cfb",
+    "storage_bucket": "aplikasirt-12cfb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687170810324:android:9764792a157e2ba306a641",
+        "android_client_info": {
+          "package_name": "com.example.app_security"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGZnUW5mbRzmXX0s-v8P19fLBz9RIzlzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

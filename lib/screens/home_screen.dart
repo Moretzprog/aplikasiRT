@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import '/screens/notification_screen.dart';
+import 'package:app_security/screens/report_screen.dart';
+import 'package:app_security/screens/notification_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+  final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F3F3),
       appBar: AppBar(
@@ -27,13 +32,13 @@ class HomeScreen extends StatelessWidget {
                       '?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                     ),
                   ),
-                  const SizedBox(width: 10.0),
+                  const SizedBox(width: 8.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text(
-                        'Grace Moretz',
+                       " ${user?.displayName ?? 'Nama Pengguna'}",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500,
@@ -58,7 +63,6 @@ class HomeScreen extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.notifications),
                   onPressed: () {
-                    // aksi ketika ditekan
                     Navigator.push(
                       context,
                       MaterialPageRoute<void>(
@@ -84,16 +88,16 @@ class HomeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                    color: Colors.black, // warna default untuk teks lainnya
-                  ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25.0,
+                        color: Colors.black,
+                      ),
                   children: [
                     const TextSpan(text: 'Komplek Selamat Riyadi '),
                     TextSpan(
                       text: 'KM 2',
                       style: const TextStyle(
-                        color: Colors.blue, // warna khusus KM 2
+                        color: Colors.blue,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -112,16 +116,16 @@ class HomeScreen extends StatelessWidget {
                   begin: Alignment.topRight,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color.fromARGB(255, 228, 220, 238),
-                    Color.fromARGB(255, 202, 190, 230),
-                    Color.fromARGB(255, 205, 192, 235),
+                    Color.fromARGB(255, 110, 194, 240),
+                    Color.fromARGB(255, 123, 196, 241),
+                    Color.fromARGB(255, 160, 216, 246),
                   ],
-                  stops: [0.0, 0.5, 0.9],
+                  stops: [0.0, 0.3, 0.7],
                 ),
                 borderRadius: BorderRadius.circular(16.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.15),
+                    color: Colors.black.withOpacity(0.1),
                     blurRadius: 6.0,
                     offset: const Offset(0, 3.0),
                   ),
@@ -135,7 +139,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Halo, jangan lupa ya pembayaran rutin aplikasi RT-nya 😉.',
+                          'Mulai sekarang dengan membayar iuran RT-nya 😉.',
                           style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w500,
@@ -145,7 +149,7 @@ class HomeScreen extends StatelessWidget {
                         const SizedBox(height: 12.0),
                         ElevatedButton(
                           onPressed: () {
-                            // aksi tombol
+                            // aksi ke halaman iuran
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -159,7 +163,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            'Bayar Sekarang',
+                            'Iuran Sekarang',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -167,7 +171,6 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10.0),
-                  // Gambar di kanan
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.asset(
@@ -188,63 +191,54 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
+
             const SizedBox(height: 20.0),
 
-            // Judul My Service
             Text(
               'Layanan',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 25.0,
-              ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 8.0),
 
             // Grid Menu
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: GridView.count(
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                crossAxisSpacing: 4.0,
-                mainAxisSpacing: 4.0,
-                childAspectRatio: 1.2,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  _buildMenuItem(Icons.report, 'Lapor', Colors.redAccent),
-                  _buildMenuItem(
-                    Icons.info,
-                    'Informasi',
-                    Colors.lightBlueAccent,
-                  ),
-                  _buildMenuItem(
-                    Icons.history_rounded,
-                    'Riwayat Iuran',
-                    Colors.greenAccent,
-                  ),
-                  _buildMenuItem(Icons.help, 'Bantuan', Colors.pinkAccent),
-                  _buildMenuItem(Icons.chat, 'Pesan', Colors.orangeAccent),
-                  _buildMenuItem(
-                    Icons.more_horiz,
-                    'Lainnya',
-                    Colors.indigoAccent,
-                  ),
-                ],
-              ),
+            GridView.count(
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              crossAxisSpacing: 4.0,
+              mainAxisSpacing: 4.0,
+              childAspectRatio: 1.2,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                _buildMenuItem(Icons.report, 'Lapor', Colors.redAccent,
+                    onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ReportScreen(),
+                    ),
+                  );
+                }),
+                _buildMenuItem(Icons.info, 'Informasi', Colors.lightBlueAccent),
+                _buildMenuItem(
+                    Icons.history_rounded, 'Riwayat Iuran', Colors.greenAccent),
+                _buildMenuItem(Icons.help, 'Bantuan', Colors.pinkAccent),
+                _buildMenuItem(Icons.chat, 'Pesan', Colors.orangeAccent),
+                _buildMenuItem(Icons.more_horiz, 'Lainnya', Colors.indigoAccent),
+              ],
             ),
+
             const SizedBox(height: 20.0),
+
             Text(
               'Berita Terbaru',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 25.0,
-              ),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 12.0),
+
             Container(
               padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
@@ -252,7 +246,7 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12.0),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black26.withOpacity(0.1),
+                    color: Colors.black.withOpacity(0.1),
                     blurRadius: 6,
                     offset: const Offset(0, 3),
                   ),
@@ -274,11 +268,8 @@ class HomeScreen extends StatelessWidget {
                           width: double.infinity,
                           color: Colors.grey[300],
                           child: const Center(
-                            child: Icon(
-                              Icons.image,
-                              color: Colors.grey,
-                              size: 40,
-                            ),
+                            child: Icon(Icons.image,
+                                color: Colors.grey, size: 40),
                           ),
                         );
                       },
@@ -307,36 +298,40 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Widget _buildMenuItem(IconData icon, String title, Color color) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
+Widget _buildMenuItem(IconData icon, String title, Color color,
+    {VoidCallback? onTap}) {
+  return InkWell(
+    borderRadius: BorderRadius.circular(16.0),
+    onTap: onTap,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 60.0,
+          height: 60.0,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(16.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Icon(icon, color: Colors.white, size: 30.0),
         ),
-        child: Center(child: Icon(icon, color: color, size: 28)),
-      ),
-      const SizedBox(height: 8.0),
-      Text(
-        title,
-        style: const TextStyle(
-          fontSize: 13.0,
-          color: Colors.black87,
-          fontWeight: FontWeight.w500,
+        const SizedBox(height: 8.0),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w600,
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
-      ),
-    ],
+      ],
+    ),
   );
 }
