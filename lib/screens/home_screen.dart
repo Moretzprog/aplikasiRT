@@ -1,16 +1,17 @@
+import 'package:app_security/screens/berita_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:app_security/screens/report_screen.dart';
 import 'package:app_security/screens/notification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:app_security/screens/panic_screen.dart';
+import 'package:app_security/screens/aboutkomplek_screen.dart';
+import 'package:app_security/screens/pembayaran_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-  final user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: const Color(0xFFF5F3F3),
       appBar: AppBar(
@@ -38,16 +39,19 @@ class HomeScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                       " ${user?.displayName ?? 'Nama Pengguna'}",
-                        style: TextStyle(
+                        user?.displayName ?? 'Nama Pengguna',
+                        style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(height: 2.0),
+                      const SizedBox(height: 2.0),
                       Text(
-                        'Selamat datang kembali!',
-                        style: TextStyle(fontSize: 15.0, color: Colors.grey),
+                        user?.email ?? 'email@example.com',
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
@@ -82,21 +86,21 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Teks di tengah
+            // Judul komplek
             Center(
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
-                        color: Colors.black,
-                      ),
-                  children: [
-                    const TextSpan(text: 'Komplek Selamat Riyadi '),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
+                    color: Colors.black,
+                  ),
+                  children: const [
+                    TextSpan(text: 'Komplek Selamat Riyadi '),
                     TextSpan(
                       text: 'KM 2',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
                       ),
@@ -108,7 +112,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 20.0),
 
-            // Container berisi text dan tombol
+            // Card iuran
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
@@ -123,13 +127,6 @@ class HomeScreen extends StatelessWidget {
                   stops: [0.0, 0.3, 0.7],
                 ),
                 borderRadius: BorderRadius.circular(16.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 6.0,
-                    offset: const Offset(0, 3.0),
-                  ),
-                ],
               ),
               child: Row(
                 children: [
@@ -150,6 +147,12 @@ class HomeScreen extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             // aksi ke halaman iuran
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (context) => const PembayaranScreen(),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -163,10 +166,12 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           child: const Text(
-                            'Iuran Sekarang',
+                            'Bayar Sekarang',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
+                          
                         ),
+                        const SizedBox(height: 8.0),
                       ],
                     ),
                   ),
@@ -178,14 +183,6 @@ class HomeScreen extends StatelessWidget {
                       width: 80.0,
                       height: 100.0,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 80.0,
-                          height: 100.0,
-                          color: Colors.grey[300],
-                          child: const Icon(Icons.image, color: Colors.grey),
-                        );
-                      },
                     ),
                   ),
                 ],
@@ -194,102 +191,106 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 20.0),
 
+            // Layanan
             Text(
               'Layanan',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, letterSpacing: 0.5),
             ),
             const SizedBox(height: 8.0),
 
-            // Grid Menu
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              crossAxisSpacing: 4.0,
-              mainAxisSpacing: 4.0,
-              childAspectRatio: 1.2,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildMenuItem(Icons.report, 'Lapor', Colors.redAccent,
+            SizedBox(
+              height: 115.0,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  _buildMenuItem(
+                    Icons.warning,
+                    'Panic Button',
+                    
+                    Colors.blue,
+                    
                     onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ReportScreen(),
-                    ),
-                  );
-                }),
-                _buildMenuItem(Icons.info, 'Informasi', Colors.lightBlueAccent),
-                _buildMenuItem(
-                    Icons.history_rounded, 'Riwayat Iuran', Colors.greenAccent),
-                _buildMenuItem(Icons.help, 'Bantuan', Colors.pinkAccent),
-                _buildMenuItem(Icons.chat, 'Pesan', Colors.orangeAccent),
-                _buildMenuItem(Icons.more_horiz, 'Lainnya', Colors.indigoAccent),
-              ],
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => const PanicScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildMenuItem(
+                    Icons.newspaper,
+                    'Berita',
+                    Colors.green,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => const NewsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildMenuItem(
+                    Icons.info,
+                    'Tentang Komplek',
+                    Colors.red,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => const AboutScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildMenuItem(Icons.chat, 'Chat', Colors.purple),
+                  _buildMenuItem(Icons.settings, 'Pengaturan', Colors.orange),
+                ],
+              ),
             ),
 
             const SizedBox(height: 20.0),
 
+            // Berita terbaru
             Text(
               'Berita Terbaru',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12.0),
 
-            Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      'https://picsum.photos/400/200',
-                      height: 150,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          height: 150,
-                          width: double.infinity,
-                          color: Colors.grey[300],
-                          child: const Center(
-                            child: Icon(Icons.image,
-                                color: Colors.grey, size: 40),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  const Text(
-                    'Kerja Bakti Bersama!',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 6.0),
-                  const Text(
-                    'Kegiatan kerja bakti dengan partisipasi RT 51',
-                    style: TextStyle(fontSize: 14.0, color: Colors.grey),
-                  ),
-                ],
-              ),
+            // List berita
+            Column(
+              children: [
+                _buildNewsItem(
+                  imageUrl: 'https://picsum.photos/400/200?1',
+                  title: 'Kerja Bakti Bersama!',
+                  description: 'Kegiatan kerja bakti dengan partisipasi RT 51',
+                  date: '12 Okt 2025',
+                  views: 120,
+                ),
+                _buildNewsItem(
+                  imageUrl: 'https://picsum.photos/400/200?2',
+                  title: 'Rapat Warga Mingguan',
+                  description:
+                      'Rapat warga di balai RT membahas keamanan komplek',
+                  date: '10 Okt 2025',
+                  views: 85,
+                ),
+                _buildNewsItem(
+                  imageUrl: 'https://picsum.photos/400/200?3',
+                  title: 'Senam Pagi',
+                  description:
+                      'Senam sehat bersama ibu-ibu komplek tiap Minggu pagi',
+                  date: '08 Okt 2025',
+                  views: 60,
+                ),
+              ],
             ),
           ],
         ),
@@ -298,39 +299,128 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Widget _buildMenuItem(IconData icon, String title, Color color,
-    {VoidCallback? onTap}) {
+// Menu Item
+Widget _buildMenuItem(
+  IconData icon,
+  String title,
+  Color color, {
+  VoidCallback? onTap,
+}) {
   return InkWell(
-    borderRadius: BorderRadius.circular(16.0),
     onTap: onTap,
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
+    borderRadius: BorderRadius.circular(16),
+    child: Container(
+      width: 80,
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: [
+          Container(
+            width: 60.0,
+            height: 60.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16.0),
+              border: Border.all(color: color, width: 1.0),
+            ),
+            child: Icon(icon, color: color, size: 30.0),
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, letterSpacing: 0.5),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildNewsItem({
+  required String imageUrl,
+  required String title,
+  required String description,
+  int views = 0,
+  String date = '',
+}) {
+  return Container(
+    margin: const EdgeInsets.only(bottom: 12.0),
+    padding: const EdgeInsets.all(12.0),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 60.0,
-          height: 60.0,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(16.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Image.network(
+            imageUrl,
+            height: 100,
+            width: 100,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                height: 100,
+                width: 100,
+                color: Colors.grey[300],
+                child: const Center(
+                  child: Icon(Icons.image, color: Colors.grey, size: 40),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(width: 12.0),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min, // 🔑 cegah error flex
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (description.isNotEmpty) ...[
+                const SizedBox(height: 6.0),
+                Text(
+                  description,
+                  style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+                ),
+              ],
+              const SizedBox(height: 10.0),
+              Text(
+                date,
+                style: const TextStyle(fontSize: 12.0, color: Colors.grey),
               ),
             ],
           ),
-          child: Icon(icon, color: Colors.white, size: 30.0),
         ),
-        const SizedBox(height: 8.0),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 14.0,
-            fontWeight: FontWeight.w600,
+        if (views > 0) ...[
+          // Menambahkan views di pojok kanan bawah
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.remove_red_eye,
+                  size: 14.0,
+                  color: Colors.grey,
+                ),
+                const SizedBox(width: 4.0),
+                Text(
+                  '$views',
+                  style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+                ),
+              ],
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
+        ],
       ],
     ),
   );

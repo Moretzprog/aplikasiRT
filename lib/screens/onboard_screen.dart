@@ -23,7 +23,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
     {
       "title": "Lapor Cepat",
-      "desc": "Laporkan kejadian atau gangguan\nlangsung dari HP Anda kapan saja.",
+      "desc":
+          "Laporkan kejadian atau gangguan\nlangsung dari HP Anda kapan saja.",
       "image": "assets/images/women.png",
       "width": 300.0,
     },
@@ -40,11 +41,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     await prefs.setBool('seenOnboarding', true);
 
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
   }
 
   @override
@@ -53,14 +52,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
-            center: Alignment(1.0, -1.0),
-            radius: 2.0,
+            center: Alignment.topCenter,
+            focal: Alignment.topCenter,
+            focalRadius: 1.0,
+            radius: 1.0,
             colors: [
-              Color(0xFFE9E4F0),
-              Color.fromARGB(255, 216, 208, 235),
-              Color.fromARGB(255, 232, 222, 241),
+              Color.fromARGB(255, 93, 181, 244),
+              Color.fromARGB(200, 225, 235, 242),
+              Color.fromARGB(255, 249, 249, 249),
             ],
-            stops: [0.0, 0.4, 1.0],
+            stops: [0.0, 0.5, 1.0],
           ),
         ),
         child: SafeArea(
@@ -85,13 +86,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: const TextStyle(
                             fontSize: 28.0,
                             fontWeight: FontWeight.bold,
+                            // color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 10.0),
                         Text(
                           onboardingData[index]["desc"]!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 16.0),
+                          style: const TextStyle(fontSize: 16.0, color: Colors.white),
                         ),
                         const SizedBox(height: 40.0),
                         Expanded(
@@ -118,8 +120,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     width: _currentPage == index ? 16.0 : 8.0,
                     height: 8.0,
                     decoration: BoxDecoration(
-                      color:
-                          _currentPage == index ? Colors.white : Colors.white54,
+                      color: _currentPage == index
+                          ? Colors.white
+                          : Colors.white54,
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
@@ -146,12 +149,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.2),
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          85,
+                          171,
+                          242,
+                        ),
                         foregroundColor: Colors.black87,
                         textStyle: const TextStyle(fontWeight: FontWeight.bold),
                         padding: const EdgeInsets.symmetric(vertical: 14.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
+
+                          // strokeAlign: BorderSide.strokeAlignOutside,
                         ),
                         minimumSize: const Size(double.infinity, 50.0),
                         elevation: 0,
@@ -163,9 +173,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             : "Next",
                         style: const TextStyle(
                           fontSize: 18.0,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w300,
+                          color: Colors.white,
                         ),
                       ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: TextButton(
+                  onPressed: _finishOnboarding,
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black87,
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    padding: const EdgeInsets.symmetric(vertical: 14.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      // side: const BorderSide(color: Colors.black87),
+                      // strokeAlign: BorderSide.strokeAlignOutside,
+                    ),
+                    minimumSize: const Size(double.infinity, 50.0),
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
+                  ),
+                  child: const Text(
+                    "Skip",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.black87,
                     ),
                   ),
                 ),

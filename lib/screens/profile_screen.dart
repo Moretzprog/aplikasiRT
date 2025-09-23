@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:app_security/auth_wrapper.dart'; // 🔑 penting agar balik ke AuthWrapper
+import 'package:app_security/auth_wrapper.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -16,16 +16,15 @@ class ProfileScreen extends StatelessWidget {
           ),
           titlePadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
           contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-          actionsPadding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
           title: Row(
             children: const [
               Icon(Icons.warning_amber_rounded, color: Colors.red, size: 28),
               SizedBox(width: 8),
-              Text(
-                "Konfirmasi",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text("Konfirmasi", style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
           content: const Text(
@@ -49,8 +48,10 @@ class ProfileScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
               ),
               onPressed: () async {
                 Navigator.pop(context); // tutup dialog dulu
@@ -62,8 +63,7 @@ class ProfileScreen extends StatelessWidget {
                   (Route<dynamic> route) => false,
                 );
               },
-              child:
-                  const Text("Ya", style: TextStyle(color: Colors.white)),
+              child: const Text("Ya", style: TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -114,20 +114,40 @@ class ProfileScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                backgroundColor: Colors.white,
+                foregroundColor: const Color.fromARGB(255, 113, 174, 224),
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
                 minimumSize: const Size(double.infinity, 48),
               ),
             ),
             const SizedBox(height: 20),
 
             Card(
+              // elevation: 4,
+              margin: const EdgeInsets.only(bottom: 16),
+              color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
                 children: [
                   ListTile(
                     leading: const Icon(Icons.settings),
                     title: const Text("Pengaturan"),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () {},
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.help),
+                    title: const Text("Bantuan"),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {},
                   ),
@@ -141,15 +161,17 @@ class ProfileScreen extends StatelessWidget {
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.logout, color: Colors.red),
-                    title: const Text("Keluar",
-                        style: TextStyle(color: Colors.red)),
+                    title: const Text(
+                      "Keluar",
+                      style: TextStyle(color: Colors.red),
+                    ),
                     onTap: () {
                       _showLogoutDialog(context);
                     },
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

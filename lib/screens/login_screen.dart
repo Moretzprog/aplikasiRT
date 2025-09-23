@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _loadUserData(); // ⬅️ load data tersimpan
+    _loadUserData();
   }
 
   @override
@@ -89,14 +89,10 @@ class _LoginScreenState extends State<LoginScreen>
         password: password,
       );
 
-      await _saveUserData(); // ⬅️ simpan kalau remember aktif
-
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const MainNavigation()),
-      );
+      await _saveUserData();
+      _goToMain();
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       _showMessage(e.message ?? "Login gagal.");
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -104,6 +100,13 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   // -------------------- PHONE LOGIN --------------------
+  String _formatPhone(String phone) {
+    if (phone.startsWith('0')) {
+      return '+62${phone.substring(1)}';
+    }
+    return phone;
+  }
+
   Future<void> _sendOtp() async {
     final phone = _phoneController.text.trim();
     if (phone.isEmpty) {
@@ -112,18 +115,17 @@ class _LoginScreenState extends State<LoginScreen>
     }
 
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phone,
+      phoneNumber: _formatPhone(phone),
       verificationCompleted: (PhoneAuthCredential credential) async {
         await FirebaseAuth.instance.signInWithCredential(credential);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const MainNavigation()),
-        );
+        _goToMain();
       },
       verificationFailed: (FirebaseAuthException e) {
+        if (!mounted) return;
         _showMessage("Verifikasi gagal: ${e.message}");
       },
       codeSent: (String verificationId, int? resendToken) {
+        if (!mounted) return;
         setState(() => _verificationId = verificationId);
         _showOtpDialog();
       },
@@ -147,11 +149,9 @@ class _LoginScreenState extends State<LoginScreen>
         smsCode: smsCode,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const MainNavigation()),
-      );
+      _goToMain();
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
       _showMessage("OTP salah: ${e.message}");
     }
   }
@@ -159,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen>
   void _showOtpDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false, // supaya tidak bisa ditutup sembarangan
       builder: (_) => AlertDialog(
         title: const Text("Masukkan OTP"),
         content: TextField(
@@ -173,14 +174,24 @@ class _LoginScreenState extends State<LoginScreen>
               _verifyOtp();
             },
             child: const Text("Verifikasi"),
-          )
+          ),
         ],
       ),
     );
   }
 
   // -------------------- HELPER --------------------
+  void _goToMain() {
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const MainNavigation()),
+      (route) => false, // hapus semua halaman sebelumnya
+    );
+  }
+
   void _showMessage(String msg) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
@@ -222,8 +233,10 @@ class _LoginScreenState extends State<LoginScreen>
               value: _rememberMe,
               onChanged: (val) {
                 setState(() => _rememberMe = val);
+                _saveUserData(); // langsung simpan
               },
-              activeThumbColor: Colors.blue,
+              activeThumbColor: Colors.white,
+              activeTrackColor: const Color.fromARGB(255, 100, 175, 228),
             ),
             const Text(
               "Ingat saya",
@@ -275,26 +288,28 @@ class _LoginScreenState extends State<LoginScreen>
 
           SafeArea(
             child: Padding(
+              
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(),
                   const Text(
-                    'Selamat Datang!',
+                    'Selamat Datang',
                     style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87),
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 8.0),
                   const Text(
                     'Silakan masuk dengan akun Anda',
                     style: TextStyle(fontSize: 16, color: Colors.black54),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 40.0),
 
                   // ----------- TAB LOGIN -----------
                   TabBar(
@@ -307,9 +322,9 @@ class _LoginScreenState extends State<LoginScreen>
                       Tab(text: "Telepon"),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 16.0),
                   SizedBox(
-                    height: 300,
+                    height: 320.0,
                     child: TabBarView(
                       controller: _tabController,
                       children: [
@@ -317,10 +332,13 @@ class _LoginScreenState extends State<LoginScreen>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Email",
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w500)),
+                            const Text(
+                              "Email",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             const SizedBox(height: 6),
                             TextField(
                               controller: _emailController,
@@ -331,10 +349,13 @@ class _LoginScreenState extends State<LoginScreen>
                               ),
                             ),
                             const SizedBox(height: 12),
-                            const Text("Password",
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w500)),
+                            const Text(
+                              "Password",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             const SizedBox(height: 6),
                             TextField(
                               controller: _passwordController,
@@ -364,14 +385,15 @@ class _LoginScreenState extends State<LoginScreen>
                             ElevatedButton(
                               onPressed: _isLoading ? null : _loginWithEmail,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
+                                backgroundColor: const Color(0xFF2193b0),
                                 foregroundColor: Colors.white,
-                                minimumSize:
-                                    const Size(double.infinity, 48),
+                                minimumSize: const Size(double.infinity, 48),
                               ),
                               child: _isLoading
                                   ? const CircularProgressIndicator(
-                                      color: Colors.white, strokeWidth: 2)
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    )
                                   : const Text("Login"),
                             ),
                           ],
@@ -381,10 +403,13 @@ class _LoginScreenState extends State<LoginScreen>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Nomor Telepon",
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w500)),
+                            const Text(
+                              "Nomor Telepon",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             const SizedBox(height: 6),
                             TextField(
                               controller: _phoneController,
@@ -392,17 +417,27 @@ class _LoginScreenState extends State<LoginScreen>
                               decoration: _inputDecoration(
                                 label: 'Nomor Telepon',
                                 icon: Icons.phone,
-                                hint: '+62xxxxxxxx',
+                                hint: 'Masukkan nomor telepon Anda',
+                                suffixIcon: IconButton(
+                                  icon: const Icon(
+                                    Icons.clear,
+                                    color: Colors.black,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _phoneController.clear();
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 50.0),
                             ElevatedButton(
                               onPressed: _sendOtp,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
+                                backgroundColor: const Color(0xFF2193b0),
                                 foregroundColor: Colors.white,
-                                minimumSize:
-                                    const Size(double.infinity, 48),
+                                minimumSize: const Size(double.infinity, 48),
                               ),
                               child: const Text("Kirim OTP"),
                             ),
@@ -412,12 +447,13 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                   ),
 
-                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Belum punya akun?',
-                          style: TextStyle(color: Colors.black)),
+                      const Text(
+                        'Belum punya akun?',
+                        style: TextStyle(color: Colors.black),
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -430,8 +466,9 @@ class _LoginScreenState extends State<LoginScreen>
                         child: const Text(
                           'Daftar',
                           style: TextStyle(
-                              color: Color.fromARGB(255, 5, 143, 181),
-                              fontWeight: FontWeight.bold),
+                            color: Color.fromARGB(255, 5, 143, 181),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
