@@ -27,10 +27,9 @@ class HomeScreen extends StatelessWidget {
               Row(
                 children: [
                   const CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage: NetworkImage(
-                      'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg'
-                      '?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                    radius: 30.0,
+                    backgroundImage: AssetImage(
+                      'images/profile/avatar1.jpg',
                     ),
                   ),
                   const SizedBox(width: 8.0),
@@ -179,7 +178,7 @@ class HomeScreen extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.asset(
-                      'assets/images/people1.png',
+                      'assets/images/homepage.png',
                       width: 80.0,
                       height: 100.0,
                       fit: BoxFit.cover,
@@ -204,6 +203,7 @@ class HomeScreen extends StatelessWidget {
               height: 115.0,
               child: ListView(
                 scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                 children: [
                   _buildMenuItem(
@@ -247,8 +247,8 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuItem(Icons.chat, 'Chat', Colors.purple),
-                  _buildMenuItem(Icons.settings, 'Pengaturan', Colors.orange),
+                  _buildMenuItem(Icons.payment, 'Riwayat Pembayaran', Colors.orange),
+                  _buildMenuItem(Icons.settings, 'Pengaturan', Colors.purple),
                 ],
               ),
             ),
@@ -310,7 +310,7 @@ Widget _buildMenuItem(
     onTap: onTap,
     borderRadius: BorderRadius.circular(16),
     child: Container(
-      width: 80,
+      width: 80.0,
       margin: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: [
@@ -335,6 +335,7 @@ Widget _buildMenuItem(
     ),
   );
 }
+
 
 Widget _buildNewsItem({
   required String imageUrl,

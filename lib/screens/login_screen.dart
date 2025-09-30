@@ -218,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen>
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Colors.blue),
       ),
-      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 138, 203, 238)),
+      prefixIcon: Icon(icon, color:Color.fromARGB(255, 93, 115, 123)),
       suffixIcon: suffixIcon,
     );
   }
@@ -236,11 +236,11 @@ class _LoginScreenState extends State<LoginScreen>
                 _saveUserData(); // langsung simpan
               },
               activeThumbColor: Colors.white,
-              activeTrackColor: const Color.fromARGB(255, 100, 175, 228),
+              activeTrackColor: Color(0xFFA4CCD9),
             ),
             const Text(
               "Ingat saya",
-              style: TextStyle(fontSize: 14, color: Colors.black87),
+              style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 100, 123, 131)),
             ),
           ],
         ),
@@ -252,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen>
             "Lupa Password?",
             style: TextStyle(
               fontSize: 14,
-              color: Colors.blue,
+              color: Color.fromARGB(255, 99, 121, 129),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -272,9 +272,9 @@ class _LoginScreenState extends State<LoginScreen>
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromARGB(255, 138, 203, 238),
+                  Color(0xFFA4CCD9),
                   Color.fromARGB(200, 225, 235, 242),
-                  Colors.white,
+                  Color.fromARGB(255, 249, 249, 249),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -288,7 +288,6 @@ class _LoginScreenState extends State<LoginScreen>
 
           SafeArea(
             child: Padding(
-              
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -314,9 +313,9 @@ class _LoginScreenState extends State<LoginScreen>
                   // ----------- TAB LOGIN -----------
                   TabBar(
                     controller: _tabController,
-                    labelColor: Colors.blue,
+                    labelColor: Color.fromARGB(255, 100, 123, 131),
                     unselectedLabelColor: Colors.black54,
-                    indicatorColor: Colors.blue,
+                    indicatorColor: Color.fromARGB(255, 100, 123, 131),
                     tabs: const [
                       Tab(text: "Email"),
                       Tab(text: "Telepon"),
@@ -339,7 +338,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 6.0),
                             TextField(
                               controller: _emailController,
                               decoration: _inputDecoration(
@@ -348,7 +347,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 hint: 'Masukkan alamat email Anda',
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 12.0),
                             const Text(
                               "Password",
                               style: TextStyle(
@@ -356,7 +355,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 6.0),
                             TextField(
                               controller: _passwordController,
                               obscureText: !_isPasswordVisible,
@@ -379,20 +378,20 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 8.0),
                             _buildRememberMeRow(),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 16.0),
                             ElevatedButton(
                               onPressed: _isLoading ? null : _loginWithEmail,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2193b0),
+                                backgroundColor: Color.fromARGB(255, 99, 124, 132),
                                 foregroundColor: Colors.white,
-                                minimumSize: const Size(double.infinity, 48),
+                                minimumSize: const Size(double.infinity, 48.0),
                               ),
                               child: _isLoading
                                   ? const CircularProgressIndicator(
                                       color: Colors.white,
-                                      strokeWidth: 2,
+                                      strokeWidth: 2.5,
                                     )
                                   : const Text("Login"),
                             ),
@@ -410,7 +409,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 6.0),
                             TextField(
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
@@ -435,7 +434,7 @@ class _LoginScreenState extends State<LoginScreen>
                             ElevatedButton(
                               onPressed: _sendOtp,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2193b0),
+                                backgroundColor: Color.fromARGB(255, 97, 121, 129),
                                 foregroundColor: Colors.white,
                                 minimumSize: const Size(double.infinity, 48),
                               ),
@@ -466,7 +465,7 @@ class _LoginScreenState extends State<LoginScreen>
                         child: const Text(
                           'Daftar',
                           style: TextStyle(
-                            color: Color.fromARGB(255, 5, 143, 181),
+                            color: Color.fromARGB(255, 98, 123, 131),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

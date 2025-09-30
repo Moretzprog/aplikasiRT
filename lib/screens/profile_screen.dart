@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:app_security/auth_wrapper.dart';
+import 'editprofile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -87,9 +88,12 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage('https://picsum.photos/400/200'),
+              backgroundImage: AssetImage(user?.photoURL != null
+                  ? user!.photoURL!
+                  : 'images/profile/avatar1.jpg' // Ganti dengan path gambar profil yang sesuai
+                  ),
             ),
             const SizedBox(height: 16),
 
@@ -106,7 +110,11 @@ class ProfileScreen extends StatelessWidget {
 
             ElevatedButton.icon(
               onPressed: () {
-                // TODO: ke halaman edit profil
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const EditProfileScreen()),
+                );
               },
               icon: const Icon(Icons.edit),
               label: const Text("Edit Profile"),
@@ -130,7 +138,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             Card(
-              // elevation: 4,
+
               margin: const EdgeInsets.only(bottom: 16),
               color: Colors.white,
               shape: RoundedRectangleBorder(

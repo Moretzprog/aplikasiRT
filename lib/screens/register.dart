@@ -99,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: Colors.blue.withOpacity(0.3)),
+        borderSide: BorderSide(color: Color.fromARGB(255, 100, 123, 131).withOpacity(0.3)),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -109,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: Colors.blue),
       ),
-      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 138, 203, 238)),
+      prefixIcon: Icon(icon, color: const Color.fromARGB(255, 100, 123, 131)),
       suffixIcon: suffixIcon,
     );
   }
@@ -125,9 +125,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color.fromARGB(255, 138, 203, 238),
+                  Color(0xFFA4CCD9),
                   Color.fromARGB(200, 225, 235, 242),
-                  Color.fromARGB(255, 255, 255, 255),
+                  Color.fromARGB(255, 249, 249, 249),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -315,7 +315,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2193b0),
+                          backgroundColor: const Color.fromARGB(255, 100, 123, 131),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
@@ -358,7 +358,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: const Text(
                             'Login',
                             style: TextStyle(
-                              color: Color.fromARGB(255, 5, 143, 181),
+                              color: Color.fromARGB(255, 100, 123, 131),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

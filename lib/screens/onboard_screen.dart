@@ -18,20 +18,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       "title": "Selamat Datang",
       "desc": "Mari berkolaborasi menjaga\nrumah tangga aman dan nyaman.",
-      "image": "assets/images/people3.png",
+      "image": "images/onboard1.png",
       "width": 300.0,
     },
     {
       "title": "Lapor Cepat",
       "desc":
           "Laporkan kejadian atau gangguan\nlangsung dari HP Anda kapan saja.",
-      "image": "assets/images/women.png",
+      "image": "images/onboard2.png",
       "width": 300.0,
     },
     {
       "title": "Komunitas Aman",
       "desc": "Bersama kami mewujudkan lingkungan\nyang lebih aman dan nyaman.",
-      "image": "assets/images/people2.png",
+      "image": "images/onboard3.png",
       "width": 500.0,
     },
   ];
@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             focalRadius: 1.0,
             radius: 1.0,
             colors: [
-              Color.fromARGB(255, 93, 181, 244),
+              Color(0xFFA4CCD9),
               Color.fromARGB(200, 225, 235, 242),
               Color.fromARGB(255, 249, 249, 249),
             ],
@@ -70,7 +70,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   onPageChanged: (index) {
                     setState(() => _currentPage = index);
                   },
@@ -84,16 +84,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           onboardingData[index]["title"]!,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontSize: 28.0,
+                            fontSize: 30.0,
                             fontWeight: FontWeight.bold,
-                            // color: Colors.white,
+                            letterSpacing: 1.0,
+                            color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 10.0),
                         Text(
                           onboardingData[index]["desc"]!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 16.0, color: Colors.white),
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
                         ),
                         const SizedBox(height: 40.0),
                         Expanded(
@@ -121,8 +125,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     height: 8.0,
                     decoration: BoxDecoration(
                       color: _currentPage == index
-                          ? Colors.white
-                          : Colors.white54,
+                          ? Color(0xFFA4CCD9)
+                          : const Color.fromARGB(137, 213, 213, 213),
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                   ),
@@ -149,12 +153,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(
-                          255,
-                          85,
-                          171,
-                          242,
-                        ),
+                        backgroundColor: const Color(0xFFA4CCD9).withOpacity(
+                          0.7,
+                        ), // Warna latar belakang dengan transparansi
                         foregroundColor: Colors.black87,
                         textStyle: const TextStyle(fontWeight: FontWeight.bold),
                         padding: const EdgeInsets.symmetric(vertical: 14.0),

@@ -24,6 +24,12 @@ dependencies:
   shared_preferences: ^2.2.0
   fluttertoast: ^8.2.2
   share_plus: ^10.0.0
+  qr_flutter: ^4.1.0
+  intl: ^0.18.1
+
+  # dummy data
+  sqflite: ^2.4.2
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
@@ -34,11 +40,11 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/welcomescreen.png
-    - assets/images/women.png
-    - assets/images/people1.png
-    - assets/images/people2.png
-    - assets/images/people3.png
+    - assets/images/onboard1.png
+    - assets/images/onboard2.png
+    - assets/images/onboard3.png
+    - assets/images/homepage.png
+    - assets/images/creditcard.png
 
   fonts:
     - family: Inter
